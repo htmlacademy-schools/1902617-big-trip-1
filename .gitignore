@@ -6,9 +6,10 @@ Thumbs.db
 .idea
 *.sublime*
 .vscode
-
+.vs/slnx.sqlite
 # Вспомогательные файлы
 *.log*
 node_modules/
 
 # Собранные файлы (допишите самостоятельно)
+/public/bundle.js
