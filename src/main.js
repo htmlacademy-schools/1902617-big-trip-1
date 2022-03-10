@@ -22,5 +22,5 @@ renderTemplate(siteEventElement, createSiteFormCreateTemplate(), RenderPosition.
 renderTemplate(siteEventElement, createSiteFormEditTemplate(), RenderPosition.BEFOREEND);
 
 for (let i = 0; i < 3; i++) {
-    renderTemplate(siteEventElement, createSiteWayPointTemplate(), RenderPosition.BEFOREEND);
+  renderTemplate(siteEventElement, createSiteWayPointTemplate(), RenderPosition.BEFOREEND);
 }
