@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 
 export const createInfoTemplate = (waypoints) => {
-  const pointDate = waypoints[0].date_from;
-  const pointDateEnd = waypoints[waypoints.length-1].date_to;
+  const pointDate = waypoints[0].dateFrom;
+  const pointDateEnd = waypoints[waypoints.length-1].dateTo;
   let totalPrice = 0;
   let totalRoute = '';
   let lastCity='';
   for (const waypoint of waypoints){
-    totalPrice+=waypoint.base_price;
+    totalPrice+=waypoint.basePrice;
     waypoint.offers.offers.forEach((offer) => {
       totalPrice+=offer.price;
     });

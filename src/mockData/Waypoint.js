@@ -53,15 +53,15 @@ export const getOffers=(someType)=>{
 
 export const getPoint = () =>{
   const type=getRandomElement(types);
-  const date_from=getTime(getRandomInt(1, 864)*5);
-  const date_to=getTime(getRandomInt(1, 24)*5, date_from);
+  const dateFrom=getTime(getRandomInt(1, 864)*5);
+  const dateTo=getTime(getRandomInt(1, 24)*5, dateFrom);
   return {
-    base_price: getRandomInt(0, 1200),
-    date_from,
-    date_to,
+    basePrice: getRandomInt(0, 1200),
+    dateFrom,
+    dateTo,
     destination: getDestination(),
     id: (ids++).toString(),
-    is_favorite: getRandomInt(0,1)===1,
+    isFavorite: getRandomInt(0,1)===1,
     offers: getOffers(type),
     type,
   };

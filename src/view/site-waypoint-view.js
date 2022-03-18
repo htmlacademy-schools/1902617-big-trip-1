@@ -19,11 +19,11 @@ const createSiteOffersTemplate = (someOffers)=>{
 };
 
 export const createSiteWayPointTemplate = (waypoint) => {
-  const pointDate = waypoint.date_from;
-  const pointDateEnd = waypoint.date_to;
+  const pointDate = waypoint.dateFrom;
+  const pointDateEnd = waypoint.dateTo;
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
-  const pointPrice = waypoint.base_price;
+  const pointPrice = waypoint.basePrice;
   const pointOffers = waypoint.offers.offers;
   return `<li class="trip-events__item">
       <div class="event">
@@ -44,7 +44,7 @@ export const createSiteWayPointTemplate = (waypoint) => {
           &euro;&nbsp;<span class="event__price-value">${pointPrice}</span>
         </p>
         ${createSiteOffersTemplate(pointOffers)}
-        <button class="event__favorite-btn ${waypoint.is_favorite ? 'event__favorite-btn--active' : ''}" type="button">
+        <button class="event__favorite-btn ${waypoint.isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
             <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>

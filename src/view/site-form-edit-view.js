@@ -45,11 +45,11 @@ const createSiteFormDescription = (description='', pictures=[]) => {
 };
 
 export const createSiteFormEditTemplate = (waypoint) => {
-  const pointDate = waypoint.date_from;
-  const pointDateEnd = waypoint.date_to;
+  const pointDate = waypoint.dateFrom;
+  const pointDateEnd = waypoint.dateTo;
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
-  const pointPrice = waypoint.base_price;
+  const pointPrice = waypoint.basePrice;
   const pointOffers = waypoint.offers.offers;
   const pointDescription = waypoint.destination.description;
   const pointPictures = waypoint.destination.pictures;

@@ -10,7 +10,7 @@ import {createInfoTemplate} from './view/site-info-view.js';
 import { getPoint } from './mockData/Waypoint.js';
 
 const waypointsNum = 17;
-const waypoints = Array.from({ length: waypointsNum }, getPoint()).sort((x, y) => x.date_from - y.date_from);
+const waypoints = Array.from({ length: waypointsNum }, getPoint()).sort((x, y) => x.dateFrom - y.dateFrom);
 
 const siteMainElement = document.querySelector('.trip-main');
 const siteMenuElement = siteMainElement.querySelector('.trip-controls__navigation');
