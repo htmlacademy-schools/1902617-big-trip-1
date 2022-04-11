@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import { createElement } from '../render';
 
-export const createInfoTemplate = (waypoints) => {
+const createInfoTemplate = (waypoints) => {
   const pointDate = waypoints[0].dateFrom;
   const pointDateEnd = waypoints[waypoints.length-1].dateTo;
   let totalPrice = 0;
@@ -27,3 +28,29 @@ export const createInfoTemplate = (waypoints) => {
       </p>
     </section>`;
 };
+
+export default class siteInfoView{
+  #element=null
+
+  constructor(waypoints){
+    this.waypoints=waypoints;
+  }
+
+  get element(){
+    if (!(this.#element)){
+      this.#element=createElement(this.infoTemplate);
+    }
+    return this.#element;
+  }
+
+  get infoTemplate(){
+    if (this.waypoints?.length>0){
+      return createInfoTemplate(this.waypoints);
+    }
+    return ' ';
+  }
+
+  removeElement(){
+    this.#element=null;
+  }
+}
