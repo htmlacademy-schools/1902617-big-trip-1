@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { getInterval } from '../tools';
+import { createElement } from '../render';
 
 const createSiteOffersTemplate = (someOffers)=>{
   if (someOffers.length === 0){
@@ -18,7 +19,7 @@ const createSiteOffersTemplate = (someOffers)=>{
   </ul>`;
 };
 
-export const createSiteWayPointTemplate = (waypoint) => {
+const createSiteWayPointTemplate = (waypoint) => {
   const pointDate = waypoint.dateFrom;
   const pointDateEnd = waypoint.dateTo;
   const pointType = waypoint.type;
@@ -56,3 +57,26 @@ export const createSiteWayPointTemplate = (waypoint) => {
       </div>
     </li>`;
 };
+
+export default class siteWayPoint{
+  #element=null
+
+  constructor(waypoint){
+    this.waypoint=waypoint;
+  }
+
+  get element(){
+    if (!(this.#element)){
+      this.#element=createElement(this.waypointTemplate);
+    }
+    return this.#element;
+  }
+
+  get waypointTemplate(){
+    return createSiteWayPointTemplate(this.waypoint);
+  }
+
+  removeElement(){
+    this.#element=null;
+  }
+}

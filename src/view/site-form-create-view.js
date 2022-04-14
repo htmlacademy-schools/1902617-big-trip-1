@@ -1,13 +1,14 @@
 import dayjs from 'dayjs';
+import { createElement } from '../render';
 
-const createSiteFormOffersTemplate = (someOffers)=>{
+const createSiteFormOffersTemplate = (someOffers, someType)=>{
   if (someOffers.length === 0){
     return '';
   }
 
   someOffers=someOffers.map((offer) => `<div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}">
-  <label class="event__offer-label" for="event-offer-${offer.id}-1">
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${someType}-${offer.id}" type="checkbox" name="event-offer-${someType}" checked="checked">
+  <label class="event__offer-label" for="event-offer-${someType}-${offer.id}">
     <span class="event__offer-title">${offer.title}</span>d
     &plus;&euro;&nbsp;
     <span class="event__offer-price">${offer.price}</span>
@@ -44,13 +45,14 @@ const createSiteFormDescription = (description='', pictures=[]) => {
   </section>`;
 };
 
-export const createSiteFormCreateTemplate = (waypoint) => {
+const createSiteFormCreateTemplate = (waypoint) => {
   const pointDate = waypoint.dateFrom;
   const pointDateEnd = waypoint.dateTo;
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
   const pointPrice = waypoint.basePrice;
   const pointOffers = waypoint.offers.offers;
+  const pointOffersType = waypoint.offers.type;
   const pointDescription = waypoint.destination.description;
   const pointPictures = waypoint.destination.pictures;
   return `<li class="trip-events__item">
@@ -134,7 +136,7 @@ export const createSiteFormCreateTemplate = (waypoint) => {
         </header>
         <section class="event__details">
 
-        ${createSiteFormOffersTemplate(pointOffers)}
+        ${createSiteFormOffersTemplate(pointOffers, pointOffersType)}
 
         ${createSiteFormDescription(pointDescription, pointPictures)}
 
@@ -142,3 +144,26 @@ export const createSiteFormCreateTemplate = (waypoint) => {
       </form>
     </li>`;
 };
+
+export default class siteFormCreateView{
+  #element=null
+
+  constructor(waypoint){
+    this.waypoint=waypoint;
+  }
+
+  get element(){
+    if (!(this.#element)){
+      this.#element=createElement(this.formCreateTemplate);
+    }
+    return this.#element;
+  }
+
+  get formCreateTemplate(){
+    return createSiteFormCreateTemplate(this.waypoint);
+  }
+
+  removeElement(){
+    this.#element=null;
+  }
+}
