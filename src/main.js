@@ -21,6 +21,7 @@ const siteEventsElement = document.querySelector('.trip-events');
 renderElement(siteMainElement, new siteInfoView(waypoints).element, RenderPosition.AFTERBEGIN);
 renderElement(siteMenuElement, new siteMenuView().element, RenderPosition.BEFOREEND);
 renderElement(siteFilterElement, new siteFilterView().element, RenderPosition.BEFOREEND);
+
 if (waypoints?.length > 0){
   renderElement(siteEventsElement, new siteSortView().element, RenderPosition.BEFOREEND);
   renderElement(siteEventsElement, new siteEventsView().element, RenderPosition.BEFOREEND);

@@ -1,4 +1,6 @@
-export const createSiteSortTemplate = () => (
+import { createElement } from '../render';
+
+const createSiteSortTemplate = () => (
   ` <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <div class="trip-sort__item  trip-sort__item--day">
         <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
@@ -22,3 +24,22 @@ export const createSiteSortTemplate = () => (
       </div>
     </form>`
 );
+
+export default class siteSortView{
+  #element=null
+
+  get element(){
+    if (!(this.#element)){
+      this.#element=createElement(this.sortTemplate);
+    }
+    return this.#element;
+  }
+
+  get sortTemplate(){
+    return createSiteSortTemplate();
+  }
+
+  removeElement(){
+    this.#element=null;
+  }
+}
