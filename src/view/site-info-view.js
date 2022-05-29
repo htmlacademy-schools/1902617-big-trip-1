@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render';
+import AbstractView from './abstract-view.js';
 
 const createInfoTemplate = (waypoints) => {
   const pointDate = waypoints[0].dateFrom;
@@ -29,28 +29,18 @@ const createInfoTemplate = (waypoints) => {
     </section>`;
 };
 
-export default class siteInfoView{
-  #element=null
+export default class SiteInfoView extends AbstractView{
+  #waypoints=null;
 
   constructor(waypoints){
-    this.waypoints=waypoints;
+    super();
+    this.#waypoints=waypoints;
   }
 
-  get element(){
-    if (!(this.#element)){
-      this.#element=createElement(this.infoTemplate);
-    }
-    return this.#element;
-  }
-
-  get infoTemplate(){
-    if (this.waypoints?.length>0){
-      return createInfoTemplate(this.waypoints);
+  get template(){
+    if (this.#waypoints?.length>0){
+      return createInfoTemplate(this.#waypoints);
     }
     return ' ';
-  }
-
-  removeElement(){
-    this.#element=null;
   }
 }

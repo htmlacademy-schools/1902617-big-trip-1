@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render';
+import AbstractView from './abstract-view.js';
 
 const createSiteFormOffersTemplate = (someOffers, someType)=>{
   if (someOffers.length === 0){
@@ -149,25 +149,35 @@ const createSiteFormEditTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class siteFormEditView{
-  #element=null
+export default class SiteFormEditView extends AbstractView{
+  #waypoint=null;
 
   constructor(waypoint){
-    this.waypoint=waypoint;
+    super();
+    this.#waypoint=waypoint;
   }
 
-  get element(){
-    if (!(this.#element)){
-      this.#element=createElement(this.formEditTemplate);
-    }
-    return this.#element;
+  get template(){
+    return createSiteFormEditTemplate(this.#waypoint);
+  }
+  
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   }
 
-  get formEditTemplate(){
-    return createSiteFormEditTemplate(this.waypoint);
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement(){
-    this.#element=null;
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 }

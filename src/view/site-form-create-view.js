@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../render';
+import AbstractView from './abstract-view.js';
 
 const createSiteFormOffersTemplate = (someOffers, someType)=>{
   if (someOffers.length === 0){
@@ -145,25 +145,15 @@ const createSiteFormCreateTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class siteFormCreateView{
-  #element=null
+export default class SiteFormCreateView extends AbstractView{
+  #waypoint=null;
 
   constructor(waypoint){
-    this.waypoint=waypoint;
+    super();
+    this.#waypoint=waypoint;
   }
 
-  get element(){
-    if (!(this.#element)){
-      this.#element=createElement(this.formCreateTemplate);
-    }
-    return this.#element;
-  }
-
-  get formCreateTemplate(){
-    return createSiteFormCreateTemplate(this.waypoint);
-  }
-
-  removeElement(){
-    this.#element=null;
+  get template(){
+    return createSiteFormCreateTemplate(this.#waypoint);
   }
 }
