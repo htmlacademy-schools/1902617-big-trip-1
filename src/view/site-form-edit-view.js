@@ -160,7 +160,7 @@ export default class SiteFormEditView extends AbstractView{
   get template(){
     return createSiteFormEditTemplate(this.#waypoint);
   }
-  
+
   setClickHandler = (callback) => {
     this._callback.click = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);

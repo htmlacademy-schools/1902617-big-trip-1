@@ -1,4 +1,4 @@
-import { createElement } from "../render";
+import { createElement } from '../render';
 
 export default class AbstractView{
 
@@ -6,23 +6,23 @@ export default class AbstractView{
     _callback={};
 
     constructor(){
-        if (new.target==AbstractView){
-            throw new Error('Can\'t instantiate AbstractView, only concrete one.');
-        }
+      if (new.target===AbstractView){
+        throw new Error('Can\'t instantiate AbstractView, only concrete one.');
+      }
     }
 
     get element(){
-        if (!(this.#element)){
-          this.#element=createElement(this.EmptyTemplate);
-        }
-        return this.#element;
+      if (!(this.#element)){
+        this.#element=createElement(this.EmptyTemplate);
+      }
+      return this.#element;
     }
-    
+
     get template(){
-        throw new Error('Abstract method not implemented: get template');
+      throw new Error('Abstract method not implemented: get template');
     }
 
     removeElement(){
-        this.#element=null;
-      }
-}  
+      this.#element=null;
+    }
+}

@@ -60,9 +60,9 @@ for (let k = 0; k < waypoints?.length; k++) {
   });
 
   formEdit.setClickHandler(()=>{
-      siteEventElement.replaceChild(wayPoint.element, formEdit.element);
-      document.removeEventListener('keydown', onEscKeyDown);
-    }
+    siteEventElement.replaceChild(wayPoint.element, formEdit.element);
+    document.removeEventListener('keydown', onEscKeyDown);
+  }
   );
 
   render(siteEventElement, wayPoint.element, RenderPosition.BEFOREEND);

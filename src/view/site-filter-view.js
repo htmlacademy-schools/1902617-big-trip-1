@@ -21,7 +21,7 @@ const createSiteFilterTemplate = () => (
     </form>`
 );
 
-export default class SiteFilterView{
+export default class SiteFilterView extends AbstractView{
   get template(){
     return createSiteFilterTemplate();
   }
