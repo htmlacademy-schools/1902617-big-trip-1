@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { getInterval } from '../tools';
-import { createElement } from '../render';
+import AbstractView from './abstract-view.js';
 
 const createSiteOffersTemplate = (someOffers)=>{
   if (someOffers.length === 0){
@@ -58,25 +58,25 @@ const createSiteWayPointTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class siteWayPoint{
-  #element=null
+export default class SiteWayPointView extends AbstractView{
+  #waypoint=null;
 
   constructor(waypoint){
-    this.waypoint=waypoint;
+    super();
+    this.#waypoint=waypoint;
   }
 
-  get element(){
-    if (!(this.#element)){
-      this.#element=createElement(this.waypointTemplate);
-    }
-    return this.#element;
+  get template(){
+    return createSiteWayPointTemplate(this.#waypoint);
   }
 
-  get waypointTemplate(){
-    return createSiteWayPointTemplate(this.waypoint);
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
   }
 
-  removeElement(){
-    this.#element=null;
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
   }
 }

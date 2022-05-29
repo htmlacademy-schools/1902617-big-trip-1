@@ -1,24 +1,18 @@
-import { createElement } from '../render';
+import AbstractView from './abstract-view.js';
 
 const createSiteEmptyTemplate = (text)=>(
   `<p class="trip-events__msg">${text}</p>`
 );
 
-export default class siteEmptyView{
-    #element=null
+export default class SiteEmptyView extends AbstractView{
+    #text=null;
 
-    get element(){
-      if (!(this.#element)){
-        this.#element=createElement(this.EmptyTemplate);
-      }
-      return this.#element;
+    constructor(text){
+      super();
+      this.#text=text;
     }
 
-    get EmptyTemplate(){
-      return createSiteEmptyTemplate();
-    }
-
-    removeElement(){
-      this.#element=null;
+    get template(){
+      return createSiteEmptyTemplate(this.#text);
     }
 }
