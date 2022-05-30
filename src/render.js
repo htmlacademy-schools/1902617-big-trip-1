@@ -36,10 +36,10 @@ export const replace = (newElement, oldElement) => {
   if (newElement === null || oldElement === null) {
     throw new Error('Can\'t replace unexisting elements');
   }
-  
+
   const oldChild = oldElement instanceof AbstractView ? oldElement.element : oldElement;
   const newChild = newElement instanceof AbstractView ? newElement.element : newElement;
-  
+
   const parent = oldChild.parentElement;
 
   if (parent === null) {
