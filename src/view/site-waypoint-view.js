@@ -79,4 +79,14 @@ export default class SiteWayPointView extends AbstractView{
     evt.preventDefault();
     this._callback.click();
   }
+
+  setFavoriteHandler = (callback) =>{
+    this._callback.favoriteClick = callback;
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteHandler);
+  }
+
+  #favoriteHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
 }

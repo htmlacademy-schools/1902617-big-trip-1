@@ -13,7 +13,7 @@ export default class AbstractView{
 
     get element(){
       if (!(this.#element)){
-        this.#element=createElement(this.EmptyTemplate);
+        this.#element=createElement(this.template);
       }
       return this.#element;
     }

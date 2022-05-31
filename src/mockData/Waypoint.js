@@ -1,4 +1,5 @@
 import { getRandomInt, getRandomElement, getTime} from '../tools.js';
+import { nanoid } from 'nanoid';
 
 const cities=['Amsterdam','Chamonix','Geneva','Ekaterinburg'];
 const sentences=['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Cras aliquet varius magna, non porta ligula feugiat eget.', 'Fusce tristique felis at fermentum pharetra.',
@@ -8,15 +9,14 @@ const sentences=['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Cr
 
 const types=['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const offersTypes=['Add luggage','Switch to comfort class','Add meal','Choose seats','Travel by train', 'Order Uber', 'Rent a car'];
-let ids=0;
 
 const getDestination  = () =>{
   const name = getRandomElement(cities);
 
   const discNum=getRandomInt(1, 5);
-  const description='';
+  let description='';
   for (let k=0; k<discNum; k++){
-    [description, getRandomElement(sentences)].join(' ');
+    description=[description, getRandomElement(sentences)].join(' ');
   }
 
   const picNum=getRandomInt(1, 5);
@@ -60,7 +60,7 @@ export const getPoint = () =>{
     dateFrom,
     dateTo,
     destination: getDestination(),
-    id: (ids++).toString(),
+    id: nanoid(),
     isFavorite: getRandomInt(0,1)===1,
     offers: getOffers(type),
     type,
