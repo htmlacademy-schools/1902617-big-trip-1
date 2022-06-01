@@ -9,6 +9,7 @@ export const getRandomInt = (min, max)=>{
 export const getRandomElement = (elements)=>elements[getRandomInt(0, elements.length-1)];
 
 export const getTime = (interval, lastDate=dayjs())=>lastDate.add(interval, 'minute');
+
 export const getInterval = (interval)=>{
   let hours = Math.trunc(+interval/60);
   const days = Math.trunc(hours/24);
@@ -39,3 +40,9 @@ export const getInterval = (interval)=>{
   }
   return finalTime;
 };
+
+export const sortWayPointsByDay = (x, y) => x.dateFrom - y.dateFrom;
+
+export const sortWayPointsByPrice = (x, y) => y.basePrice - x.basePrice;
+
+export const sortWayPointsByDuration = (x, y) => (y.dateTo - y.dateFrom)-(x.dateTo - x.dateFrom);
