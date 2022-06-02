@@ -1,12 +1,13 @@
 import SiteMenuView from '../view/site-menu-view.js';
-import { render, RenderPosition, updateItem } from '../render.js';
 import SiteFilterView from '../view/site-filter-view.js';
 import SiteSortView from '../view/site-sort-view.js';
 import SiteEventsView from '../view/site-events-view.js';
-import SiteFormCreateView from '../view/site-form-create-view.js';
 import SiteInfoView from '../view/site-info-view.js';
 import SiteEmptyView from '../view/site-empty-view.js';
 import PointPresenter from './point-presenter.js';
+import { SortType } from '../const.js';
+import { render, RenderPosition, updateItem } from '../render.js';
+import { sortWayPointsByDay, sortWayPointsByDuration, sortWayPointsByPrice } from '../tools.js';
 
 export default class TripPresenter{
     #siteMainElement = null;
@@ -15,8 +16,14 @@ export default class TripPresenter{
     #siteEventsElement = null;
     #siteEventElement = null;
 
+    #sortElement = new SiteSortView();
+    #menuElement = new SiteMenuView();
+    #filterElement = new SiteFilterView();
+    #eventsElement = new SiteEventsView();
+
     #waypoints=[];
     #wayPointPresenter= new Map();
+    #currentSortType = SortType.DAY;
 
     constructor(){
       this.#siteMainElement = document.querySelector('.trip-main');
@@ -27,14 +34,17 @@ export default class TripPresenter{
 
     init = (waypoints) => {
       this.#waypoints = [...waypoints];
+      this.#currentSortType = SortType.DAY;
+      this.#sortWaypoints(this.#currentSortType);
 
       render(this.#siteMainElement, new SiteInfoView(this.#waypoints), RenderPosition.AFTERBEGIN);
-      render(this.#siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-      render(this.#siteFilterElement, new SiteFilterView(), RenderPosition.BEFOREEND);
+      render(this.#siteMenuElement, this.#menuElement, RenderPosition.BEFOREEND);
+      render(this.#siteFilterElement, this.#filterElement, RenderPosition.BEFOREEND);
 
       if (waypoints?.length > 0){
-        render(this.#siteEventsElement, new SiteSortView(), RenderPosition.BEFOREEND);
-        render(this.#siteEventsElement, new SiteEventsView(), RenderPosition.BEFOREEND);
+        render(this.#siteEventsElement, this.#sortElement, RenderPosition.BEFOREEND);
+        this.#sortElement.setSortTypeChangeHandler(this.#changeSortType);
+        render(this.#siteEventsElement, this.#eventsElement, RenderPosition.BEFOREEND);
       }
       else {
         const text='Click New Event to create your first point';
@@ -43,8 +53,37 @@ export default class TripPresenter{
 
       this.#siteEventElement = this.#siteEventsElement.querySelector('.trip-events__list');
 
-      render(this.#siteEventElement, new SiteFormCreateView(this.#waypoints[0]), RenderPosition.BEFOREEND);
       this.#renderWaypoints();
+    }
+
+    #sortWaypoints = (typeToSort) =>{
+      switch (typeToSort){
+        case SortType.DAY:
+          this.#waypoints.sort(sortWayPointsByDay);
+          break;
+        case SortType.TIME:
+          this.#waypoints.sort(sortWayPointsByDuration);
+          break;
+        case SortType.PRICE:
+          this.#waypoints.sort(sortWayPointsByPrice);
+          break;
+      }
+
+      this.#currentSortType = typeToSort;
+    }
+
+    #changeSortType = (typeToSort) =>{
+      if (this.#currentSortType === typeToSort){
+        return;
+      }
+
+      this.#sortWaypoints(typeToSort);
+      this.#clearWayPointsList();
+      this.#renderWaypoints();
+    }
+
+    #changeMode = () => {
+      this.#wayPointPresenter.forEach((x) => x.resetView());
     }
 
     #changePoint = (newWayPoint) => {
@@ -52,11 +91,15 @@ export default class TripPresenter{
       this.#wayPointPresenter.get(newWayPoint.id).init(newWayPoint);
     }
 
+    #renderWaypoint = (waypoint) => {
+      const pointPresenter = new PointPresenter(this.#siteEventElement, this.#changePoint, this.#changeMode);
+      pointPresenter.init(waypoint);
+      this.#wayPointPresenter.set(waypoint.id, pointPresenter);
+    }
+
     #renderWaypoints = () => {
-      for (let k = 0; k < this.#waypoints?.length; k++) {
-        const pointPresenter = new PointPresenter(this.#siteEventElement, this.#changePoint);
-        pointPresenter.init(this.#waypoints[k]);
-        this.#wayPointPresenter.set(this.#waypoints[k].id, pointPresenter);
+      for (let k = 0; k < this.#waypoints.length; k++) {
+        this.#renderWaypoint(this.#waypoints[k]);
       }
     }
 

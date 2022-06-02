@@ -11,8 +11,10 @@ export default class PointPresenter{
     #siteEventElement = null;
     #changeData = null;
     #changeMode = null;
+
     #wayPoint = null;
     #formEdit = null;
+
     #point = null;
     #mode = Mode.DEFAULT;
 
@@ -52,6 +54,12 @@ export default class PointPresenter{
       remove(lastWayPoint);
     }
 
+    resetView = () => {
+      if (this.#mode !== Mode.DEFAULT){
+        this.#changeFormEditToWayPoint();
+      }
+    }
+
     #changeFormEditToWayPoint = () => {
       replace(this.#wayPoint, this.#formEdit);
       document.removeEventListener('keydown', this.#onEscKeyDown);
@@ -66,7 +74,7 @@ export default class PointPresenter{
     }
 
     #favoriteClick = () => {
-      this.#changeData({ ...this.#wayPoint, isFavorite: !this.#wayPoint.isFavorite });
+      this.#changeData({ ...this.#point, isFavorite: !this.#point.isFavorite });
     }
 
     #wayPointClick = () => {
