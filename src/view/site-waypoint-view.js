@@ -8,7 +8,7 @@ const createSiteOffersTemplate = (someOffers, someType)=>{
 
   if (offersOfType.length > 0){
     let finalOffers=offersOfType[0].offers.filter((offer) => offer.isChosen);
-    
+
     if (finalOffers.length === 0){
       return '';
     }

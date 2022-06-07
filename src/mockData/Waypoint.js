@@ -35,18 +35,6 @@ const getDestination  = () =>{
   };
 };
 
-const getOffersArr = () => {
-  let result=[];
-  const typesNum = getRandomInt(0, 5);
-  let tempTypes = [...types];
-  for (let k = 0; k < typesNum; k++){
-    let someType = getRandomElement(tempTypes);
-    tempTypes.splice(tempTypes.indexOf(someType), 1);
-    result.push(getOffers(someType));
-  }
-  return result;
-}
-
 const getOffers=(someType)=>{
   const offersNum = getRandomInt(0, 5);
   const offers = [];
@@ -62,6 +50,18 @@ const getOffers=(someType)=>{
     type: someType,
     offers,
   };
+};
+
+const getOffersArr = () => {
+  const result=[];
+  const typesNum = getRandomInt(0, 5);
+  const tempTypes = [...types];
+  for (let k = 0; k < typesNum; k++){
+    const someType = getRandomElement(tempTypes);
+    tempTypes.splice(tempTypes.indexOf(someType), 1);
+    result.push(getOffers(someType));
+  }
+  return result;
 };
 
 export const getPoint = () =>{

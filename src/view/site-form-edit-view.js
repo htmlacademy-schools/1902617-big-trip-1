@@ -8,7 +8,7 @@ const createSiteFormOffersTemplate = (someOffers, someType)=>{
     if (offersOfType[0].offers.length === 0){
       return '';
     }
-    let finalOffers=offersOfType[0].offers.map((offer) => `<div class="event__offer-selector">
+    const finalOffers=offersOfType[0].offers.map((offer) => `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${someType}-${offer.id}" type="checkbox" name="event-offer-${someType}" checked="checked">
     <label class="event__offer-label" for="event-offer-${someType}-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
@@ -183,12 +183,12 @@ export default class SiteFormEditView extends SmartView{
     this._callback.formSubmit(this._waypoint);
   }
 
-  setChangesHandler = (callback) => {
+  setChangesHandler = () => {
     this.element.querySelector('.event__type-list').addEventListener('input', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#changeCityHandler);
 
     const offers = this.element.querySelector('.event__available-offers');
-    if (offers){ 
+    if (offers){
       offers.addEventListener('input', this.#changeOffersHandler);
     }
   }

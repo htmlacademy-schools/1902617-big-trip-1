@@ -153,7 +153,7 @@ export default class SiteFormCreateView extends SmartView{
   }
 
   get template(){
-    return createSiteFormEditTemplate(this._waypoint);
+    return createSiteFormCreateTemplate(this._waypoint);
   }
 
   setClickHandler = (callback) => {
@@ -176,12 +176,12 @@ export default class SiteFormCreateView extends SmartView{
     this._callback.formSubmit(this._waypoint);
   }
 
-  setChangesHandler = (callback) => {
+  setChangesHandler = () => {
     this.element.querySelector('.event__type-list').addEventListener('input', this.#changeTypeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#changeCityHandler);
 
     const offers = this.element.querySelector('.event__available-offers');
-    if (offers){ 
+    if (offers){
       offers.addEventListener('input', this.#changeOffersHandler);
     }
   }

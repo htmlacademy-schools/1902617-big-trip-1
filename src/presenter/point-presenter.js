@@ -40,7 +40,7 @@ export default class PointPresenter{
         this.#formEdit.setClickHandler(this.#formEditClick);
         this.#formEdit.setChangesHandler();
       };
-      
+
       this.#formEdit.restoreHandlers();
 
       if (lastFormEdit === null || lastWayPoint === null) {
@@ -91,7 +91,7 @@ export default class PointPresenter{
       this.#mode = Mode.EDITING;
     }
 
-    #formEditSubmit = (waypoint) => {      
+    #formEditSubmit = (waypoint) => {
       this.#changeData(waypoint);
       this.#changeFormEditToWayPoint();
     }

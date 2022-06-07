@@ -7,7 +7,7 @@ const createInfoTemplate = (waypoints) => {
 
   const pointDate = new Date(waypoints[0].dateFrom);
   const pointDateEnd = new Date(waypoints[waypoints.length-1].dateTo);
-  let dates =``;
+  let dates ='';
   if (pointDate.getMonth() === pointDateEnd.getMonth()){
     dates = `${dayjs(pointDate, 'MMM D')}&nbsp;&mdash;&nbsp;${dayjs(pointDateEnd, 'D')}`;
   }
@@ -35,11 +35,11 @@ const createInfoTemplate = (waypoints) => {
   }
 
   if (totalRoute.length > 3){
-    totalRoute = `${totalRoute[0]} &mdash; ... &mdash; ${totalRoute[totalRoute.length - 1]}`
+    totalRoute = `${totalRoute[0]} &mdash; ... &mdash; ${totalRoute[totalRoute.length - 1]}`;
   }
   else{
     totalRoute = totalRoute.join(' &mdash; ');
-  };
+  }
 
   return `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
