@@ -35,20 +35,33 @@ const getDestination  = () =>{
   };
 };
 
-export const getOffers=(someType)=>{
-  const offersNum=getRandomInt(0, 5);
+const getOffers=(someType)=>{
+  const offersNum = getRandomInt(0, 5);
   const offers = [];
-  for (let k = 0; k<offersNum; k++){
+  for (let k = 0; k < offersNum; k++){
     offers.push({
       id:k+1,
       title: getRandomElement(offersTypes),
       price:getRandomInt(1,20)*10,
+      isChosen: Math.random() < 0.5,
     });
   }
   return {
     type: someType,
     offers,
   };
+};
+
+const getOffersArr = () => {
+  const result=[];
+  const typesNum = getRandomInt(0, 5);
+  const tempTypes = [...types];
+  for (let k = 0; k < typesNum; k++){
+    const someType = getRandomElement(tempTypes);
+    tempTypes.splice(tempTypes.indexOf(someType), 1);
+    result.push(getOffers(someType));
+  }
+  return result;
 };
 
 export const getPoint = () =>{
@@ -62,7 +75,7 @@ export const getPoint = () =>{
     destination: getDestination(),
     id: nanoid(),
     isFavorite: getRandomInt(0,1)===1,
-    offers: getOffers(type),
+    offers: getOffersArr(),
     type,
   };
 };

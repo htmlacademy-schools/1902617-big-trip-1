@@ -34,8 +34,14 @@ export default class PointPresenter{
 
       this.#wayPoint.setFavoriteHandler(this.#favoriteClick);
       this.#wayPoint.setClickHandler(this.#wayPointClick);
-      this.#formEdit.setFormSubmitHandler(this.#formEditSubmit);
-      this.#formEdit.setClickHandler(this.#formEditClick);
+
+      this.#formEdit.restoreHandlers = () => {
+        this.#formEdit.setFormSubmitHandler(this.#formEditSubmit);
+        this.#formEdit.setClickHandler(this.#formEditClick);
+        this.#formEdit.setChangesHandler();
+      };
+
+      this.#formEdit.restoreHandlers();
 
       if (lastFormEdit === null || lastWayPoint === null) {
         render(this.#siteEventElement, this.#wayPoint, RenderPosition.BEFOREEND);
@@ -69,6 +75,7 @@ export default class PointPresenter{
     #onEscKeyDown=(evt)=>{
       if (evt.key==='Esc'||evt.key==='Escape'){
         evt.preventDefault();
+        this.#formEdit.reset(this.#point);
         this.#changeFormEditToWayPoint();
       }
     }
@@ -85,11 +92,12 @@ export default class PointPresenter{
     }
 
     #formEditSubmit = (waypoint) => {
-      this.#changeFormEditToWayPoint();
       this.#changeData(waypoint);
+      this.#changeFormEditToWayPoint();
     }
 
     #formEditClick = () => {
+      this.#formEdit.reset(this.#point);
       this.#changeFormEditToWayPoint();
     }
 }

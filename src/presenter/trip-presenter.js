@@ -6,7 +6,7 @@ import SiteInfoView from '../view/site-info-view.js';
 import SiteEmptyView from '../view/site-empty-view.js';
 import PointPresenter from './point-presenter.js';
 import { SortType } from '../const.js';
-import { render, RenderPosition, updateItem } from '../render.js';
+import { render, RenderPosition, updateItem, replace } from '../render.js';
 import { sortWayPointsByDay, sortWayPointsByDuration, sortWayPointsByPrice } from '../tools.js';
 
 export default class TripPresenter{
@@ -15,6 +15,7 @@ export default class TripPresenter{
     #siteFilterElement = null;
     #siteEventsElement = null;
     #siteEventElement = null;
+    #siteInfoElement = null;
 
     #sortElement = new SiteSortView();
     #menuElement = new SiteMenuView();
@@ -36,8 +37,9 @@ export default class TripPresenter{
       this.#waypoints = [...waypoints];
       this.#currentSortType = SortType.DAY;
       this.#sortWaypoints(this.#currentSortType);
+      this.#siteInfoElement = new SiteInfoView(this.#waypoints);
 
-      render(this.#siteMainElement, new SiteInfoView(this.#waypoints), RenderPosition.AFTERBEGIN);
+      render(this.#siteMainElement, this.#siteInfoElement, RenderPosition.AFTERBEGIN);
       render(this.#siteMenuElement, this.#menuElement, RenderPosition.BEFOREEND);
       render(this.#siteFilterElement, this.#filterElement, RenderPosition.BEFOREEND);
 
@@ -89,6 +91,10 @@ export default class TripPresenter{
     #changePoint = (newWayPoint) => {
       this.#waypoints = updateItem(this.#waypoints, newWayPoint);
       this.#wayPointPresenter.get(newWayPoint.id).init(newWayPoint);
+
+      const lastSiteInfoElement = this.#siteInfoElement;
+      this.#siteInfoElement = new SiteInfoView(this.#waypoints);
+      replace(this.#siteInfoElement, lastSiteInfoElement);
     }
 
     #renderWaypoint = (waypoint) => {
