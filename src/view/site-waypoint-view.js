@@ -2,21 +2,30 @@ import dayjs from 'dayjs';
 import { getInterval } from '../tools';
 import AbstractView from './abstract-view.js';
 
-const createSiteOffersTemplate = (someOffers)=>{
-  if (someOffers.length === 0){
-    return '';
+const createSiteOffersTemplate = (someOffers, someType)=>{
+
+  const offersOfType = someOffers.filter((x) => x.type === someType);
+
+  if (offersOfType.length > 0){
+    let finalOffers=offersOfType[0].offers.filter((offer) => offer.isChosen);
+    
+    if (finalOffers.length === 0){
+      return '';
+    }
+
+    finalOffers=finalOffers.map((offer) => `<li class="event__offer">
+    <span class="event__offer-title">${offer.title}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${offer.price}</span>
+    </li>`).join('\n');
+
+    return `<h4 class="visually-hidden">Offers:</h4>
+    <ul class="event__selected-offers">
+    ${finalOffers}
+    </ul>`;
   }
 
-  someOffers=someOffers.map((offer) => `<li class="event__offer">
-  <span class="event__offer-title">${offer.title}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${offer.price}</span>
-  </li>`).join('\n');
-
-  return `<h4 class="visually-hidden">Offers:</h4>
-  <ul class="event__selected-offers">
-  ${someOffers}
-  </ul>`;
+  return '';
 };
 
 const createSiteWayPointTemplate = (waypoint) => {
@@ -25,7 +34,7 @@ const createSiteWayPointTemplate = (waypoint) => {
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
   const pointPrice = waypoint.basePrice;
-  const pointOffers = waypoint.offers.offers;
+  const pointOffers = waypoint.offers;
   return `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="${dayjs(pointDate, 'YYYY-MM-DD')}">${dayjs(pointDate, 'MMM D')}</time>
@@ -44,7 +53,7 @@ const createSiteWayPointTemplate = (waypoint) => {
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${pointPrice}</span>
         </p>
-        ${createSiteOffersTemplate(pointOffers)}
+        ${createSiteOffersTemplate(pointOffers, pointType)}
         <button class="event__favorite-btn ${waypoint.isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
