@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import SmartView from './smart-view.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createSiteFormOffersTemplate = (someOffers, someType)=>{
   const offersOfType = someOffers.filter((x) => x.type === someType);
@@ -8,8 +10,8 @@ const createSiteFormOffersTemplate = (someOffers, someType)=>{
     if (offersOfType[0].offers.length === 0){
       return '';
     }
-    const finalOffers=offersOfType[0].offers.map((offer) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${someType}-${offer.id}" type="checkbox" name="event-offer-${someType}" checked="checked">
+    const finalOffers = offersOfType[0].offers.map((offer) => `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${someType}-${offer.id}" type="checkbox" name="event-offer-${someType}" ${offer.isChosen ? 'checked' : ''}>
     <label class="event__offer-label" for="event-offer-${someType}-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
@@ -51,15 +53,15 @@ const createSiteFormDescription = (description='', pictures=[]) => {
 };
 
 const createSiteFormEditTemplate = (waypoint) => {
-  const pointDate = waypoint.dateFrom;
-  const pointDateEnd = waypoint.dateTo;
+  const pointDate = new Date(waypoint.dateFrom);
+  const pointDateEnd = new Date(waypoint.dateTo);
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
   const pointPrice = waypoint.basePrice;
   const pointOffers = waypoint.offers;
   const pointDescription = waypoint.destination.description;
   const pointPictures = waypoint.destination.pictures;
-  const pointId=waypoint.id;
+  const pointId = waypoint.id;
   return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -115,19 +117,20 @@ const createSiteFormEditTemplate = (waypoint) => {
             <label class="event__label  event__type-output" for="event-destination-${pointId}">
             ${pointType}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-${pointId}" type="text" name="event-destination" value="${pointCity}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-${pointId}" type="text" name="event-destination" value="${pointCity}" list="destination-list-${pointId}">
             <datalist id="destination-list-${pointId}">
               <option value="Amsterdam"></option>
               <option value="Geneva"></option>
               <option value="Chamonix"></option>
+              <option value="Ekaterinburg"></option>
             </datalist>
           </div>
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${dayjs(pointDate, 'YY/MM/DD HH:mm')}">
+            <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${dayjs(pointDate).format('YY/MM/DD HH:mm')}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${dayjs(pointDateEnd, 'YY/MM/DD HH:mm')}">
+            <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${dayjs(pointDateEnd).format('YY/MM/DD HH:mm')}">
           </div>
           <div class="event__field-group  event__field-group--price">
             <label class="event__label" for="event-price-${pointId}">
@@ -154,9 +157,12 @@ const createSiteFormEditTemplate = (waypoint) => {
 };
 
 export default class SiteFormEditView extends SmartView{
+  #dateFromPicker = null;
+  #dateToPicker = null;
+
   constructor(waypoint){
     super();
-    this._waypoint=waypoint;
+    this._waypoint = waypoint;
   }
 
   get template(){
@@ -196,10 +202,10 @@ export default class SiteFormEditView extends SmartView{
   #changeTypeHandler = (evt) => {
     evt.preventDefault();
 
-    const someType = evt.target.value;
-    const offers = JSON.parse(JSON.stringify(this._waypoint.offers));
+    const type = evt.target.value;
+    const offers = [...this._waypoint.offers];
     for (const typeAndOffer of offers){
-      if (typeAndOffer.type !== someType){
+      if (typeAndOffer.type !== type){
         continue;
       }
 
@@ -209,7 +215,7 @@ export default class SiteFormEditView extends SmartView{
 
       break;
     }
-    this.updateData({ someType, offers });
+    this.updateData({ type, offers });
   }
 
   #changeCityHandler = (evt) => {
@@ -221,7 +227,7 @@ export default class SiteFormEditView extends SmartView{
     evt.preventDefault();
     const almostNum = evt.target.id.split('-');
     const num = +almostNum[almostNum.length - 1] - 1;
-    const offers = JSON.parse(JSON.stringify(this._waypoint.offers));
+    const offers = [...this._waypoint.offers];
 
     for (const typeAndOffer of offers){
       if (typeAndOffer.type !== this._waypoint.type){
@@ -236,7 +242,65 @@ export default class SiteFormEditView extends SmartView{
     this.updateData({ offers });
   }
 
+  /* eslint-disable camelcase */
+  setDatePicker = () => {
+    this.#dateFromPicker = flatpickr(
+      this.element.querySelector(`#event-start-time-${this._waypoint.id}`),
+      {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: 'j/m/y H:i',
+        defaultDate: new Date(this._waypoint.dateFrom),
+        onChange: this.#changeDateFromHandler
+      },
+    );
+    this.#dateToPicker = flatpickr(
+      this.element.querySelector(`#event-end-time-${this._waypoint.id}`),
+      {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: 'j/m/y H:i',
+        minDate: new Date(this._waypoint.dateFrom),
+        defaultDate: new Date(this._waypoint.dateTo),
+        onChange: this.#changeDateToHandler
+      },
+    );
+  }
+  /* eslint-enable camelcase */
+
+  #changeDateFromHandler = ([userDate]) => {
+    this.updateData({
+      dateFrom: userDate,
+    });
+
+    if (userDate > this._waypoint.dateTo){
+      this.updateData({
+        dateTo: userDate,
+      });
+    }
+  }
+
+  #changeDateToHandler = ([userDate]) => {
+    this.updateData({
+      dateTo: userDate,
+    });
+  }
+
   reset = (waypoint) => {
     this.updateData(waypoint);
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#dateFromPicker){
+      this.#dateFromPicker.destroy();
+      this.#dateFromPicker = null;
+    }
+
+    if (this.#dateToPicker){
+      this.#dateToPicker.destroy();
+      this.#dateToPicker = null;
+    }
   }
 }

@@ -29,24 +29,24 @@ const createSiteOffersTemplate = (someOffers, someType)=>{
 };
 
 const createSiteWayPointTemplate = (waypoint) => {
-  const pointDate = waypoint.dateFrom;
-  const pointDateEnd = waypoint.dateTo;
+  const pointDate = new Date(waypoint.dateFrom);
+  const pointDateEnd = new Date(waypoint.dateTo);
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
   const pointPrice = waypoint.basePrice;
   const pointOffers = waypoint.offers;
   return `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="${dayjs(pointDate, 'YYYY-MM-DD')}">${dayjs(pointDate, 'MMM D')}</time>
+        <time class="event__date" datetime="${dayjs(pointDate).format('YYYY-MM-DD')}">${dayjs(pointDate).format('MMM D')}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${pointType} ${pointCity}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${dayjs(pointDate, 'YYYY-MM-DDTHH:mm')}">${dayjs(pointDate, 'HH:mm')}</time>
+            <time class="event__start-time" datetime="${dayjs(pointDate).format('YYYY-MM-DDTHH:mm')}">${dayjs(pointDate).format('HH:mm')}</time>
             &mdash;
-            <time class="event__end-time" datetime="${dayjs(pointDateEnd, 'YYYY-MM-DDTHH:mm')}">${dayjs(pointDateEnd, 'HH:mm')}</time>
+            <time class="event__end-time" datetime="${dayjs(pointDateEnd).format('YYYY-MM-DDTHH:mm')}">${dayjs(pointDateEnd).format('HH:mm')}</time>
           </p>
           <p class="event__duration">${getInterval(dayjs(pointDate).diff(pointDateEnd, 'm'))}</p>
         </div>

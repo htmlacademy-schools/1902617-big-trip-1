@@ -39,6 +39,7 @@ export default class PointPresenter{
         this.#formEdit.setFormSubmitHandler(this.#formEditSubmit);
         this.#formEdit.setClickHandler(this.#formEditClick);
         this.#formEdit.setChangesHandler();
+        this.#formEdit.setDatePicker();
       };
 
       this.#formEdit.restoreHandlers();
@@ -64,6 +65,11 @@ export default class PointPresenter{
       if (this.#mode !== Mode.DEFAULT){
         this.#changeFormEditToWayPoint();
       }
+    }
+
+    destroy = () => {
+      remove(this.#wayPoint);
+      remove(this.#formEdit);
     }
 
     #changeFormEditToWayPoint = () => {

@@ -11,10 +11,10 @@ export const getRandomElement = (elements)=>elements[getRandomInt(0, elements.le
 export const getTime = (interval, lastDate=dayjs())=>lastDate.add(interval, 'minute');
 
 export const getInterval = (interval)=>{
-  let hours = Math.trunc(+interval/60);
+  let hours = Math.trunc(-interval/60);
   const days = Math.trunc(hours/24);
-  const minutes = (+interval)%60;
-  hours = hours%24;
+  const minutes = (-interval) % 60;
+  hours = hours % 24;
   let finalTime='';
   if (days>0){
     if(days>9){

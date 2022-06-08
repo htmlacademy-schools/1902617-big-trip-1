@@ -80,8 +80,7 @@ export default class TripPresenter{
       }
 
       this.#sortWaypoints(typeToSort);
-      this.#clearWayPointsList();
-      this.#renderWaypoints();
+      this.#renderAgain();
     }
 
     #changeMode = () => {
@@ -90,11 +89,13 @@ export default class TripPresenter{
 
     #changePoint = (newWayPoint) => {
       this.#waypoints = updateItem(this.#waypoints, newWayPoint);
-      this.#wayPointPresenter.get(newWayPoint.id).init(newWayPoint);
 
       const lastSiteInfoElement = this.#siteInfoElement;
       this.#siteInfoElement = new SiteInfoView(this.#waypoints);
       replace(this.#siteInfoElement, lastSiteInfoElement);
+
+      this.#sortWaypoints(this.#currentSortType);
+      this.#renderAgain();
     }
 
     #renderWaypoint = (waypoint) => {
@@ -113,4 +114,10 @@ export default class TripPresenter{
       this.#wayPointPresenter.forEach((x) => x.destroy());
       this.#wayPointPresenter.clear();
     }
+
+    #renderAgain = () => {
+      this.#clearWayPointsList();
+      this.#renderWaypoints();
+    }
+
 }
