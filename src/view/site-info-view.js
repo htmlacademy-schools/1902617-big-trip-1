@@ -9,10 +9,10 @@ const createInfoTemplate = (waypoints) => {
   const pointDateEnd = new Date(waypoints[waypoints.length-1].dateTo);
   let dates ='';
   if (pointDate.getMonth() === pointDateEnd.getMonth()){
-    dates = `${dayjs(pointDate, 'MMM D')}&nbsp;&mdash;&nbsp;${dayjs(pointDateEnd, 'D')}`;
+    dates = `${dayjs(pointDate).format('MMM D')}&nbsp;&mdash;&nbsp;${dayjs(pointDateEnd).format('D')}`;
   }
   else{
-    dates = `${dayjs(pointDate, 'D MMM')}&nbsp;&mdash;&nbsp;${dayjs(pointDateEnd, 'D MMM')}`;
+    dates = `${dayjs(pointDate).format('D MMM')}&nbsp;&mdash;&nbsp;${dayjs(pointDateEnd).format('D MMM')}`;
   }
 
   let totalPrice = 0;

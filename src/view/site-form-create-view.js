@@ -46,8 +46,8 @@ const createSiteFormDescription = (description='', pictures=[]) => {
 };
 
 const createSiteFormCreateTemplate = (waypoint) => {
-  const pointDate = waypoint.dateFrom;
-  const pointDateEnd = waypoint.dateTo;
+  const pointDate = new Date(waypoint.dateFrom);
+  const pointDateEnd = new Date(waypoint.dateTo);
   const pointType = waypoint.type;
   const pointCity = waypoint.destination.name;
   const pointPrice = waypoint.basePrice;
@@ -120,10 +120,10 @@ const createSiteFormCreateTemplate = (waypoint) => {
           </div>
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${dayjs(pointDate, 'YY/MM/DD HH:mm')}">
+            <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${dayjs(pointDate).format('YY/MM/DD HH:mm')}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${dayjs(pointDateEnd, 'YY/MM/DD HH:mm')}">
+            <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${dayjs(pointDateEnd).format('YY/MM/DD HH:mm')}">
           </div>
           <div class="event__field-group  event__field-group--price">
             <label class="event__label" for="event-price-${pointId}">
